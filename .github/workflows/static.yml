@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Bot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 50%;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h1 {
+    color: #333;
+}
+
+form {
+    margin: 20px 0;
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+h2 {
+    font-size: 1.2em;
+    color: #333;
+}
+
+</style>
+
+<body>
+    <div class="container">
+        <h1>Trading Bot</h1>
+        <form id="predictForm">
+            <label for="price">Price:</label>
+            <input type="text" id="price" name="price" required>
+
+            <label for="quantity">Quantity:</label>
+            <input type="text" id="quantity" name="quantity" required>
+
+            <label for="total">Total:</label>
+            <input type="text" id="total" name="total" required>
+
+            <button type="submit">Get Action</button>
+        </form>
+
+        <h2 id="predictionResult"></h2>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#predictForm").on("submit", function(event) {
+                event.preventDefault();
+                
+                var formData = {
+                    price: $("#price").val(),
+                    quantity: $("#quantity").val(),
+                    total: $("#total").val()
+                };
+
+                $.post("/predict", formData, function(data) {
+                    if (data.action) {
+                        $("#predictionResult").text("Action: " + data.action);
+                    } else {
+                        $("#predictionResult").text("Error: " + data.error);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
